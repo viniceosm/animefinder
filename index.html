@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="PT-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <meta name="theme-color" content="#2c0054">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+
+        <title>AnimeFinder</title>
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+
+    <body>
+        <h1>Anime Finder</h1>
+
+        <input type="file" id="fileFoto" alt="Submit">
+        
+        <div id="area-img">
+            <div id="btn-img" class="btn">Escolher foto</div>
+            <img id="img-search" crossorigin="anonymous" src="img/ano2.jpg" alt="">
+
+            <div id="btn-pesquisar" class="btn">Pesquisar</div>
+        </div>
+
+        <div id="fakeinfo">
+            <div class="card">
+                <div class="title-card">#1 Anohana: The Flower We Saw That Day</div>
+                
+                <div class="body-card">
+                    Achei a cena no arquivo [AoiNeko&amp;SD][Anohana][11][BDrip][BIG5][1280X720][MP4].mp4<br>
+                    No episodio 11<br>
+        
+                    Cena começa em 1266.58 até 1267.75<br>
+                    Frame da imagem é em 1267.67<br>
+                </div>
+            </div>
+        </div>
+        <div id="infos">
+            Pesquisando informações...
+        </div>
+        
+        <script>
+            window.onload = (() => {
+                document.querySelector('#btn-pesquisar').addEventListener('click', function () {
+                    document.querySelector('#infos').style.display = 'block';
+                    document.querySelector('#btn-pesquisar').innerHTML = 'Pesquisando';
+                    pesquisa();
+                });
+            });
+
+            //escolher foto produto
+            document.querySelector('#btn-img').addEventListener('click', function () {
+                document.querySelector('#fileFoto').click();
+            });
+            document.querySelector('#img-search').addEventListener('click', function () {
+                document.querySelector('#fileFoto').click();
+            });
+
+            document.querySelector('#fileFoto').addEventListener('change', function (e) {
+                document.querySelector('#img-search').setAttribute('src', URL.createObjectURL(e.target.files[0]));
+            });
+            
+            function pesquisa() {
+                var img = document.querySelector("img"); // select image from DOM
+                var canvas = document.createElement("canvas");
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+                var ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                
+                fetch("https://trace.moe/api/search", {
+                method: "POST",
+                body: JSON.stringify({ image: canvas.toDataURL("image/jpeg", 0.8) }),
+                headers: { "Content-Type": "application/json" }
+                })
+                .then(res => res.json())
+                .then(result => {
+                    var ahtml = '';
+                    for(doc of result.docs) {
+                        ahtml += `
+                        <div class="card">
+                            <div class="title-card">${doc.title_english}</div>
+                            
+                            <div class="body-card">
+                                Achei a cena no arquivo ${doc.filename}<br>
+                                Episódio ${doc.episode}<br>
+                    
+                                Cena começa em ${doc.from} até ${doc.to}<br>
+                                Frame da imagem é em ${doc.at}<br>
+                            </div>
+                        </div>`;
+                    }
+
+                    document.getElementById('infos').innerHTML = ahtml;
+                    document.querySelector('#btn-pesquisar').innerHTML = 'Pesquisar';
+                });
+            }
+        </script>
+    </body>
+</html>

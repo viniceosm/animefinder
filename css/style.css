@@ -1,0 +1,62 @@
+body {
+    background-color: rgb(61, 26, 26);
+    background-color: #2c0054;
+    color: white;
+    box-sizing: border-box;
+
+    font-family: 'Open Sans', sans-serif;
+}
+
+#fileFoto {
+    display: none;
+}
+
+#area-img {
+    width: 250px;
+}
+
+.btn {
+    background: white;
+    color: black;
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+}
+
+#btn-img {
+    margin-bottom: 5px;
+}
+
+#btn-pesquisar {
+    margin-top: 5px;
+}
+
+#img-search {
+    cursor: pointer;
+    width: 100%;
+}
+
+
+#infos {
+    display: none;
+    margin-top: 5px;
+}
+
+#fakeinfo {
+    display: none;
+    margin-top: 5px;
+}
+
+.card {
+    border: 1px solid white;
+    margin: 5px 0px;
+}
+
+.title-card {
+    background-color: #5600a5;
+    padding: 5px;
+}
+
+.body-card {
+    padding: 5px;
+}
